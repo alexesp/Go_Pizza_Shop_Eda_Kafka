@@ -2,8 +2,6 @@ package logger
 
 import (
 	"os"
-
-	"github.com/alexesp/Go_Pizza_Shop_Eda_Kafka/order_service/utils/"
 )
 
 func Log(message any) {
