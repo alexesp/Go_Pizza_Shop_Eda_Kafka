@@ -3,8 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-
-	"golang.org/x/tools/go/analysis/passes/defers"
+	"os"
 )
 
 func AppendToFile(filePath string, data interface{}) error {
@@ -15,21 +14,21 @@ func AppendToFile(filePath string, data interface{}) error {
 		dataStr = v
 	default:
 		jsonData, err := json.Marshal(data)
-		err != nil{
+		if err != nil {
 			dataStr = fmt.Sprintf("%v", data)
-		}else{
+		} else {
 			dataStr = string(jsonData)
 		}
 	}
 
 	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil{
+	if err != nil {
 		return fmt.Errorf("failed to open file: %v", err)
 	}
 	defer file.Close()
 
-	_, err := file.WriteString(dataStr)
-	if err != nil{
+	_, err = file.WriteString(dataStr)
+	if err != nil {
 		return fmt.Errorf("error writing file: %v", err)
 	}
 	return nil
