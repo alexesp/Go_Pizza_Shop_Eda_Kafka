@@ -55,3 +55,23 @@ func initDatabase() (*mongo.Client, error) {
 	log.Printf("Connected to MongoDB: %s", dbURL)
 	return client, nil
 }
+
+func GetDatabaseCollection(dbName *string, collectionName string) *mongo.Collection {
+	if dbName == nil {
+		dbName = &MONGO_DB_NAME
+
+	}
+	client, err := InitializeDB()
+	if err != nil || client == nil {
+		log.Fatalf("MongoDB client initialization failed: %v", err)
+	}
+	return client.Database(*dbName).Collection(collectionName)
+}
+
+func GetMongoClient() *mongo.Client {
+	client, err := InitializeDB()
+	if err != nil || client == nil {
+		log.Fatalf("MongoDB client initialization failed: %v", err)
+	}
+	return client
+}
