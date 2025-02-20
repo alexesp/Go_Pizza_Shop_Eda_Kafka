@@ -139,3 +139,13 @@ func CreateAllTopics(conn *kafka.Conn) {
 		},
 	)
 }
+
+func (k *KafkaConnection) Close() {
+	if k.writer != nil {
+		err := k.writer.Close()
+		if err != nil {
+			logger.Log(fmt.Sprintf("Failed to close kafka writer: %v", err))
+		}
+	}
+	k.conn.Close()
+}
