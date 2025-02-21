@@ -5,6 +5,11 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/alexesp/Go_Pizza_Shop_Eda_Kafka.git/constants"
+	messageconsumer "github.com/alexesp/Go_Pizza_Shop_Eda_Kafka.git/message-consumer"
+	"github.com/alexesp/Go_Pizza_Shop_Eda_Kafka.git/repository"
+	"github.com/alexesp/Go_Pizza_Shop_Eda_Kafka.git/routes"
+	"github.com/alexesp/Go_Pizza_Shop_Eda_Kafka.git/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,6 +24,17 @@ func main() {
 			"message": "service is up and runnig",
 		})
 	})
+
+	var repositories = repository.GetRepositories()
+	var orderConsumer = messageconsumer.GetOrderMessageConsumer(
+		service.GetNewKafkaConsumer(constants.TOPIC_ORDER, "order-message"),
+		*repositories,
+	)
+
+	routes.RegisterRoutes(
+		app,
+		service.GetKafkaMessagePublisher(constants.TOPIC_ORDER),
+	)
 
 	srv := &http.Server{
 		Addr:           fmt.Sprintf(":%d", 8001),

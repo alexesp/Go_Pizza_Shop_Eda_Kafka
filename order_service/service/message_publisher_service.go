@@ -13,6 +13,7 @@ import (
 
 type IMessagePublisher interface {
 	PublishEvent(topicName string, body interface{})
+	GetKafkaMessagePublisher(topic string)
 }
 
 type KafkaMessagePublisher struct {
